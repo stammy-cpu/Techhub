@@ -198,9 +198,8 @@ export default function Page() {
                   d="M960.758,934.509l2.632,23.541c0.15,1.403-0.25,2.657-1.203,3.761c-0.953,1.053-2.156,1.579-3.61,1.579H833.424
                c-1.454,0-2.657-0.526-3.61-1.579c-0.952-1.104-1.354-2.357-1.203-3.761l2.632-23.541H960.758z M953.763,871.405l6.468,58.29H831.77
                l6.468-58.29c0.15-1.203,0.677-2.218,1.58-3.045c0.903-0.827,1.981-1.241,3.234-1.241h19.254v9.627c0,2.658,0.94,4.927,2.82,6.807
-               s4.149,2.82,6.807,2.82c2.658,0,4.926-0.94,6.807-2.82s2.821-4.149,2.821-6.807v-9.627h28.882v9.627
-               c0,2.658,0.939,4.927,2.819,6.807c1.881,1.88,4.149,2.82,6.807,2.82s4.927-0.94,6.808-2.82c1.879-1.88,2.82-4.149,2.82-6.807v-9.627
-               h19.253c1.255,0,2.332,0.414,3.235,1.241C953.086,869.187,953.612,870.202,953.763,871.405z M924.881,857.492v19.254
+               s4.149,2.82,6.807,2.82c2.658,0,4.926-0.94,6.807-2.82s2.821-4.149,2.82-6.807v-9.627h19.253c1.255,0,2.332,0.414,3.235,1.241
+               C953.086,869.187,953.612,870.202,953.763,871.405z M924.881,857.492v19.254
                c0,1.304-0.476,2.432-1.429,3.385s-2.08,1.429-3.385,1.429c-1.303,0-2.432-0.477-3.384-1.429c-0.953-0.953-1.43-2.081-1.43-3.385
                v-19.254c0-7.973,2.821-14.779,8.461-20.42c5.641-5.641,12.448-8.461,20.42-8.461c7.973,0,14.779,2.82,20.42,8.461
                C922.062,842.712,924.881,849.519,924.881,857.492z"
@@ -220,10 +219,7 @@ export default function Page() {
       </header>
 
       {/* Hero */}
-      <section
-        id="home"
-        className="relative overflow-hidden isolate" // isolate creates a new stacking context
-      >
+      <section id="home" className="relative overflow-hidden isolate">
         {/* Backgrounds */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-br from-soft to-[#E6EFE7]" />
         <div className="pointer-events-none absolute -top-24 -left-20 h-72 w-72 rounded-full bg-[#95A99B]/25 blur-3xl" />
@@ -262,18 +258,25 @@ export default function Page() {
             </div>
           </div>
 
-          {/* Hero image — bulletproof wrapper */}
+          {/* Hero image – plain <img> to nuke any next/image wrapper issues */}
           <div className="grid place-items-center">
-            <div className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-line shadow-sm">
-              {/* Ensure height via aspect; prevents collapse */}
+            <div
+              className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-line shadow-sm z-10"
+              style={{ isolation: "isolate" }}
+            >
               <div className="relative aspect-[3/2]">
-                <Image
+                <img
                   src="/hero/hero-woman.png"
                   alt="Professional woman"
-                  fill
-                  className="object-cover"
-                  priority
-                  sizes="(min-width: 1024px) 48rem, 100vw"
+                  loading="eager"
+                  decoding="sync"
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    visibility: "visible",
+                  }}
                 />
               </div>
             </div>
@@ -286,34 +289,10 @@ export default function Page() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {[
-              {
-                icon: "bi-journals",
-                cornerIcon: "bi-book",
-                title: "Library",
-                desc: "Books, Essays, Periodicals & Briefs.",
-                href: "#library",
-              },
-              {
-                icon: "bi-camera-video",
-                cornerIcon: "bi-play-btn",
-                title: "Webinars",
-                desc: "Live & on-demand sessions.",
-                href: "#learning",
-              },
-              {
-                icon: "bi-broadcast-pin",
-                cornerIcon: "bi-mic",
-                title: "Podcasts",
-                desc: "Conversations in care.",
-                href: "#podcasts",
-              },
-              {
-                icon: "bi-bag",
-                cornerIcon: "bi-bag",
-                title: "Catalog",
-                desc: "Publications & memberships.",
-                href: "#catalog",
-              },
+              { icon: "bi-journals", cornerIcon: "bi-book", title: "Library", desc: "Books, Essays, Periodicals & Briefs.", href: "#library" },
+              { icon: "bi-camera-video", cornerIcon: "bi-play-btn", title: "Webinars", desc: "Live & on-demand sessions.", href: "#learning" },
+              { icon: "bi-broadcast-pin", cornerIcon: "bi-mic", title: "Podcasts", desc: "Conversations in care.", href: "#podcasts" },
+              { icon: "bi-bag", cornerIcon: "bi-bag", title: "Catalog", desc: "Publications & memberships.", href: "#catalog" },
             ].map((it) => (
               <a
                 key={it.title}
@@ -394,7 +373,7 @@ export default function Page() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {libraryItems.map((p) => (
               <article key={p.title} className="pub">
-                {/* Cover area: image if provided; otherwise icon fallback */}
+                {/* Cover area */}
                 <div className="relative h-40 w-full overflow-hidden rounded-lg bg-soft lg:h-[200px]">
                   {p.img ? (
                     <Image
@@ -526,38 +505,11 @@ export default function Page() {
             <h2 className="font-display text-2xl">Catalog & Memberships</h2>
             <p className="text-muted">Publications, bundles, and access plans</p>
           </div>
-        <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-3">
             {[
-              {
-                badge: "",
-                title: "Open Access",
-                price: "$0",
-                desc: "Free resources and selected articles.",
-                b1: "Selected essays & briefs",
-                b2: "Podcast access",
-                b3: "Community newsletter",
-                cta: "Get Started",
-              },
-              {
-                badge: "Popular",
-                title: "Professional",
-                price: "$29/mo",
-                desc: "Best for active clinicians and trainees.",
-                b1: "Full library access",
-                b2: "Webinar certificates",
-                b3: "Conference discounts",
-                cta: "Choose Plan",
-              },
-              {
-                badge: "",
-                title: "Institution",
-                price: "Custom",
-                desc: "For clinics, programs, and universities.",
-                b1: "Seat-based licensing",
-                b2: "LMS integrations",
-                b3: "Dedicated support",
-                cta: "Talk to Sales",
-              },
+              { badge: "", title: "Open Access", price: "$0", desc: "Free resources and selected articles.", b1: "Selected essays & briefs", b2: "Podcast access", b3: "Community newsletter", cta: "Get Started" },
+              { badge: "Popular", title: "Professional", price: "$29/mo", desc: "Best for active clinicians and trainees.", b1: "Full library access", b2: "Webinar certificates", b3: "Conference discounts", cta: "Choose Plan" },
+              { badge: "", title: "Institution", price: "Custom", desc: "For clinics, programs, and universities.", b1: "Seat-based licensing", b2: "LMS integrations", b3: "Dedicated support", cta: "Talk to Sales" },
             ].map((t) => (
               <div key={t.title} className="rounded-2xl border border-line bg-white p-6 shadow-sm">
                 {t.badge && (
