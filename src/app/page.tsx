@@ -1,3 +1,5 @@
+'use client';
+
 import Image from "next/image";
 
 type LibraryItem = {
@@ -42,7 +44,7 @@ export default function Page() {
   ];
 
   return (
-    <main>
+    <main className="min-h-screen">
       {/* Topbar */}
       <div className="w-full border-b border-line bg-soft py-2 text-sm">
         <div className="container mx-auto flex items-center justify-between px-4">
@@ -198,8 +200,9 @@ export default function Page() {
                   d="M960.758,934.509l2.632,23.541c0.15,1.403-0.25,2.657-1.203,3.761c-0.953,1.053-2.156,1.579-3.61,1.579H833.424
                c-1.454,0-2.657-0.526-3.61-1.579c-0.952-1.104-1.354-2.357-1.203-3.761l2.632-23.541H960.758z M953.763,871.405l6.468,58.29H831.77
                l6.468-58.29c0.15-1.203,0.677-2.218,1.58-3.045c0.903-0.827,1.981-1.241,3.234-1.241h19.254v9.627c0,2.658,0.94,4.927,2.82,6.807
-               s4.149,2.82,6.807,2.82c2.658,0,4.926-0.94,6.807-2.82s2.821-4.149,2.82-6.807v-9.627h19.253c1.255,0,2.332,0.414,3.235,1.241
-               C953.086,869.187,953.612,870.202,953.763,871.405z M924.881,857.492v19.254
+               s4.149,2.82,6.807,2.82c2.658,0,4.926-0.94,6.807-2.82s2.821-4.149,2.82-6.807v-9.627h28.882v9.627
+               c0,2.658,0.939,4.927,2.819,6.807c1.881,1.88,4.149,2.82,6.807,2.82s4.927-0.94,6.808-2.82c1.879-1.88,2.82-4.149,2.82-6.807v-9.627
+               h19.253c1.255,0,2.332,0.414,3.235,1.241C953.086,869.187,953.612,870.202,953.763,871.405z M924.881,857.492v19.254
                c0,1.304-0.476,2.432-1.429,3.385s-2.08,1.429-3.385,1.429c-1.303,0-2.432-0.477-3.384-1.429c-0.953-0.953-1.43-2.081-1.43-3.385
                v-19.254c0-7.973,2.821-14.779,8.461-20.42c5.641-5.641,12.448-8.461,20.42-8.461c7.973,0,14.779,2.82,20.42,8.461
                C922.062,842.712,924.881,849.519,924.881,857.492z"
@@ -219,11 +222,11 @@ export default function Page() {
       </header>
 
       {/* Hero */}
-      <section id="home" className="relative overflow-hidden isolate">
-        {/* Backgrounds */}
+      <section id="home" className="relative isolate overflow-hidden">
+        {/* Backgrounds at -z-10 so they never cover content */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-br from-soft to-[#E6EFE7]" />
-        <div className="pointer-events-none absolute -top-24 -left-20 h-72 w-72 rounded-full bg-[#95A99B]/25 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 -right-20 h-96 w-96 rounded-full bg-[#243426]/20 blur-3xl" />
+        <div className="pointer-events-none absolute -top-24 -left-20 h-72 w-72 rounded-full bg-[#95A99B]/25 blur-3xl -z-10" />
+        <div className="pointer-events-none absolute -bottom-24 -right-20 h-96 w-96 rounded-full bg-[#243426]/20 blur-3xl -z-10" />
 
         <div className="container mx-auto grid gap-8 px-4 pt-10 pb-4 md:grid-cols-2 md:items-center md:pt-14 md:pb-6">
           <div>
@@ -258,29 +261,22 @@ export default function Page() {
             </div>
           </div>
 
-          {/* Hero image – plain <img> to nuke any next/image wrapper issues */}
+          {/* Hero image — robust wrapper ensures height + cover */}
           <div className="grid place-items-center">
-            <div
-              className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-line shadow-sm z-10"
-              style={{ isolation: "isolate" }}
-            >
+            <div className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-line shadow-sm">
               <div className="relative aspect-[3/2]">
-                <img
+                <Image
                   src="/hero/hero-woman.png"
                   alt="Professional woman"
-                  loading="eager"
-                  decoding="sync"
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    visibility: "visible",
-                  }}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(min-width: 1024px) 48rem, 100vw"
                 />
               </div>
             </div>
           </div>
+
         </div>
       </section>
 
@@ -370,7 +366,7 @@ export default function Page() {
             <p className="text-muted">Books • Essays • Periodicals • Briefs</p>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {libraryItems.map((p) => (
               <article key={p.title} className="pub">
                 {/* Cover area */}
