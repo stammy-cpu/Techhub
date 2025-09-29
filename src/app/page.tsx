@@ -1,6 +1,7 @@
 'use client';
 
 import Image from "next/image";
+import { useState } from "react";
 
 type LibraryItem = {
   title: string;
@@ -10,6 +11,44 @@ type LibraryItem = {
   alt?: string;
   icon?: string; // fallback icon if no img
 };
+
+/** Tries next/image, falls back to plain <img> if prod path is wrong (404) */
+function SmartImage({
+  src,
+  alt,
+  className,
+  sizes,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  sizes?: string;
+}) {
+  const [broken, setBroken] = useState(false);
+  if (broken) {
+    return (
+      <img
+        src={src}
+        alt={alt}
+        className={className ? className : "block w-full h-full object-cover"}
+        style={{ display: "block" }}
+      />
+    );
+  }
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      // Bypass optimizer in prod (avoids _next/image path quirks while debugging)
+      unoptimized
+      onError={() => setBroken(true)}
+      className={className ? className : "object-cover"}
+      sizes={sizes}
+      priority
+    />
+  );
+}
 
 export default function Page() {
   const libraryItems: LibraryItem[] = [
@@ -261,16 +300,13 @@ export default function Page() {
             </div>
           </div>
 
-          {/* Hero image — robust wrapper ensures height + cover */}
+          {/* Hero image — SmartImage tries next/image then falls back */}
           <div className="grid place-items-center">
             <div className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-line shadow-sm">
               <div className="relative aspect-[3/2]">
-                <Image
+                <SmartImage
                   src="/hero/hero-woman.png"
                   alt="Professional woman"
-                  fill
-                  className="object-cover"
-                  priority
                   sizes="(min-width: 1024px) 48rem, 100vw"
                 />
               </div>
@@ -353,6 +389,7 @@ export default function Page() {
               className="object-cover"
               sizes="(min-width:1024px) 50vw, (min-width:768px) 50vw, 100vw"
               priority
+              unoptimized
             />
           </div>
         </div>
@@ -366,10 +403,9 @@ export default function Page() {
             <p className="text-muted">Books • Essays • Periodicals • Briefs</p>
           </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {libraryItems.map((p) => (
               <article key={p.title} className="pub">
-                {/* Cover area */}
                 <div className="relative h-40 w-full overflow-hidden rounded-lg bg-soft lg:h-[200px]">
                   {p.img ? (
                     <Image
@@ -378,6 +414,7 @@ export default function Page() {
                       fill
                       className="object-cover"
                       sizes="(min-width:1024px) 300px, 50vw"
+                      unoptimized
                     />
                   ) : (
                     <div className="grid h-full w-full place-items-center">
