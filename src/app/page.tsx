@@ -26,20 +26,19 @@ export default function Page() {
       alt: "Integrative Acne Management brief",
     },
     {
-  title: "Aesthetics & Outcomes Quarterly",
-  meta: "Periodical",
-  link: "#",
-  img: "/library/ao-quarterly-v2-600x400.jpg",
-  alt: "Analytics card with charts in green palette",
-},
-{
-  title: "Ethics of Beauty in Medicine",
-  meta: "Essay",
-  link: "#",
-  img: "/library/ethics-beauty-v2-600x400.jpg",
-  alt: "Balance scale, laurel, and book motif in green palette",
-},
-
+      title: "Aesthetics & Outcomes Quarterly",
+      meta: "Periodical",
+      link: "#",
+      img: "/library/ao-quarterly-v2-600x400.jpg",
+      alt: "Analytics card with charts in green palette",
+    },
+    {
+      title: "Ethics of Beauty in Medicine",
+      meta: "Essay",
+      link: "#",
+      img: "/library/ethics-beauty-v2-600x400.jpg",
+      alt: "Balance scale, laurel, and book motif in green palette",
+    },
   ];
 
   return (
@@ -221,7 +220,11 @@ export default function Page() {
       </header>
 
       {/* Hero */}
-      <section id="home" className="relative overflow-hidden">
+      <section
+        id="home"
+        className="relative overflow-hidden isolate" // isolate creates a new stacking context
+      >
+        {/* Backgrounds */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-br from-soft to-[#E6EFE7]" />
         <div className="pointer-events-none absolute -top-24 -left-20 h-72 w-72 rounded-full bg-[#95A99B]/25 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -right-20 h-96 w-96 rounded-full bg-[#243426]/20 blur-3xl" />
@@ -259,19 +262,22 @@ export default function Page() {
             </div>
           </div>
 
-          {/* Hero image */}
+          {/* Hero image — bulletproof wrapper */}
           <div className="grid place-items-center">
-  <Image
-    src="/hero/hero-woman.png"
-    alt="Professional woman"
-    width={1536}
-    height={1024}
-    className="w-full max-w-3xl rounded-2xl border border-line shadow-sm"
-    priority
-    sizes="(min-width: 1024px) 48rem, 100vw"
-  />
-</div>
-
+            <div className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-line shadow-sm">
+              {/* Ensure height via aspect; prevents collapse */}
+              <div className="relative aspect-[3/2]">
+                <Image
+                  src="/hero/hero-woman.png"
+                  alt="Professional woman"
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(min-width: 1024px) 48rem, 100vw"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -520,7 +526,7 @@ export default function Page() {
             <h2 className="font-display text-2xl">Catalog & Memberships</h2>
             <p className="text-muted">Publications, bundles, and access plans</p>
           </div>
-          <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
             {[
               {
                 badge: "",
