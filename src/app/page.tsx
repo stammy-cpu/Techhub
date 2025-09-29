@@ -261,16 +261,17 @@ export default function Page() {
 
           {/* Hero image */}
           <div className="grid place-items-center">
-            <Image
-              src="/hero-woman.png"
-              alt="Professional woman"
-              width={1536}
-              height={1024}
-              className="w-full max-w-3xl rounded-2xl border border-line object-cover shadow-sm"
-              priority
-              sizes="(min-width: 1024px) 48rem, 100vw"
-            />
-          </div>
+  <div className="relative w-full max-w-3xl aspect-[3/2] rounded-2xl border border-line shadow-sm overflow-hidden">
+    <Image
+      src="/hero/hero-woman.png"
+      alt="Professional woman"
+      fill
+      className="object-cover"
+      priority
+      sizes="(min-width: 1024px) 48rem, 100vw"
+    />
+  </div>
+</div>
         </div>
       </section>
 
